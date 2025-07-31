@@ -210,10 +210,12 @@
       <button onclick="closePopup()">Tutup</button>
     </div>
   </div>
+
+  <audio id="backgroundMusic" src="sempurna.mp3" loop autoplay></audio>
   <script>
     const pageTitles = [
       "Happy Girlfriend Day 💖",
-      "My Apologies to You", // Judul halaman kedua diubah ke Bahasa Inggris
+      "My Apologies to You",
       "Perasaan Untukmu",
       "Janji Masa Depan",
       "Untukmu, Alayya Tercinta",
@@ -253,6 +255,7 @@
     const subheadEl = document.getElementById("subheadText");
     const mainTitleEl = document.getElementById("mainTitle");
     const secretLetterContentEl = document.getElementById("secretLetterContent");
+    const backgroundMusic = document.getElementById('backgroundMusic'); // Ambil elemen audio
 
     function updateContent() {
       contentEl.innerHTML = pages[page];
@@ -286,6 +289,27 @@
     function closePopup() {
       popup.style.display = "none";
     }
+
+    // Ini adalah bagian JavaScript untuk mencoba memutar lagu secara otomatis
+    document.addEventListener('DOMContentLoaded', () => {
+      backgroundMusic.play().catch(error => {
+        // Ini akan berjalan jika browser memblokir autoplay
+        console.log("Autoplay of music was prevented by the browser:", error);
+        // Kamu bisa menambahkan pesan ke pengguna di sini,
+        // misalnya, "Musik tidak dapat diputar otomatis. Klik di mana saja untuk memulai."
+      });
+    });
+
+    // Event listener untuk memulai musik saat ada interaksi pengguna
+    // Ini adalah fallback terbaik jika autoplay diblokir
+    document.body.addEventListener('click', () => {
+      // Hanya coba putar jika musik belum berjalan
+      if (backgroundMusic.paused) {
+        backgroundMusic.play().catch(error => {
+          console.log("Music play after click was also prevented:", error);
+        });
+      }
+    }, { once: true }); // { once: true } artinya listener ini hanya akan aktif sekali
 
     updateContent();
   </script>
