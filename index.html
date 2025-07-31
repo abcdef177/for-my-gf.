@@ -123,16 +123,15 @@
       to { opacity: 1; transform: scale(1); }
     }
     .deep {
-      /* Perubahan di sini: Menggunakan font Poppins */
-      font-family: 'Poppins', sans-serif;
-      font-size: 1.05rem; /* Ukuran disesuaikan sedikit agar tetap proporsional */
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
       font-style: normal;
       background: #fff6fa;
       padding: 25px;
       border-radius: 20px;
       border: 1px dashed var(--hotpink);
       text-align: center;
-      line-height: 1.8;
+      line-height: 1.7;
       margin-top: 20px;
     }
     .signature {
@@ -182,14 +181,25 @@
     .final-page .date-location {
         font-size: 0.9rem;
         color: #888;
-        margin-top: 15px; /* Disesuaikan agar tidak terlalu jauh */
+        margin-top: 15px;
         font-style: italic;
     }
     .final-page .closing-sign {
         font-family: 'Pacifico', cursive;
         font-size: 1.2rem;
         color: var(--hotpink);
-        margin-top: 20px; /* Jarak antara teks dan tanda tangan */
+        margin-top: 20px;
+    }
+
+    /* --- ANIMASI TRANSISI BARU --- */
+    /* Menambahkan kelas untuk transisi */
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.3s ease-out; /* Durasi animasi fade-out */
+    }
+    .fade-in {
+      opacity: 1;
+      transition: opacity 0.3s ease-in; /* Durasi animasi fade-in */
     }
   </style>
 </head>
@@ -199,8 +209,8 @@
     <div class="subhead" id="subheadText"></div>
     <div class="content" id="content"></div>
     <div class="buttons">
-      <button onclick="prevPage()">Back</button>
-      <button onclick="nextPage()">Next</button>
+      <button onclick="handleNavigation(-1)">Back</button>
+      <button onclick="handleNavigation(1)">Next</button>
     </div>
     <div class="footer">from 170+ km away • but never truly apart 💌</div>
   </div>
@@ -245,7 +255,7 @@
        </div>`,
       `<div class="final-page">
           <div class="main-message">Terima Kasih, Maaf, dan Harapan Terbesarku.</div>
-          Untuk semua canda tawa, setiap dukungan yang tak pernah habis, dan kesabaranmu yang luar biasa—terima kasih banyak, Alayya. Aku tau aku masih memiliki banyak kekurangan, dan untuk semua itu, aku mohon maaf. Semoga kita bisa terus tumbuh bersama, melewati setiap rintangan, dan menjadikan jarak ini hanya sebuah kenangan indah di masa depan.
+          Untuk semua canda tawa, setiap dukungan yang tak pernah habis, dan kesabaranmu yang luar biasa—terima kasih banyak, Alayya. Aku tahu aku masih memiliki banyak kekurangan, dan untuk semua itu, aku mohon maaf. Semoga kita bisa terus tumbuh bersama, melewati setiap rintangan, dan menjadikan jarak ini hanya sebuah kenangan indah di masa depan.
           <div class="closing-sign">Dengan segenap cinta dan rindu,</div>
           <div class="date-location">Kediri, 1 Agustus 2025</div>
       </div>`
@@ -259,30 +269,56 @@
     const secretLetterContentEl = document.getElementById("secretLetterContent");
     const backgroundMusic = document.getElementById('backgroundMusic');
 
-    function updateContent() {
-      contentEl.innerHTML = pages[page];
-      mainTitleEl.textContent = pageTitles[page];
-      if (page === 0) {
-        subheadEl.textContent = "For my love, Alayya — the one I’d choose in every lifetime";
-      } else {
-        subheadEl.textContent = "";
-      }
-      secretLetterContentEl.innerHTML = secretLetterText;
+    // Fungsi utama untuk memperbarui konten, sekarang dengan animasi
+    function updateContent(direction = 0) { // direction 0 for initial, -1 for prev, 1 for next
+      // Tambahkan kelas fade-out sebelum mengubah konten
+      contentEl.classList.add('fade-out');
+      mainTitleEl.classList.add('fade-out'); // Tambahkan fade-out untuk judul utama juga
+      subheadEl.classList.add('fade-out'); // Tambahkan fade-out untuk subhead juga
+
+      // Tunggu sampai animasi fade-out selesai (misal 300ms dari CSS transition)
+      setTimeout(() => {
+        // Hapus kelas fade-out setelah konten tidak terlihat
+        contentEl.classList.remove('fade-out');
+        mainTitleEl.classList.remove('fade-out');
+        subheadEl.classList.remove('fade-out');
+
+        // Perbarui konten halaman
+        contentEl.innerHTML = pages[page];
+        mainTitleEl.textContent = pageTitles[page];
+        if (page === 0) {
+          subheadEl.textContent = "For my love, Alayya — the one I’d choose in every lifetime";
+        } else {
+          subheadEl.textContent = "";
+        }
+        secretLetterContentEl.innerHTML = secretLetterText;
+
+        // Tambahkan kelas fade-in setelah konten diperbarui
+        contentEl.classList.add('fade-in');
+        mainTitleEl.classList.add('fade-in');
+        subheadEl.classList.add('fade-in');
+
+        // Hapus kelas fade-in setelah animasi selesai (agar siap untuk animasi selanjutnya)
+        setTimeout(() => {
+          contentEl.classList.remove('fade-in');
+          mainTitleEl.classList.remove('fade-in');
+          subheadEl.classList.remove('fade-in');
+        }, 300); // Harus sama atau lebih lama dari durasi transition CSS
+      }, 300); // Harus sama dengan durasi transition CSS
     }
 
-    function nextPage() {
-      if (page < pages.length - 1) {
-        page++;
-        updateContent();
+    // Fungsi handleNavigation untuk mengganti nextPage dan prevPage
+    function handleNavigation(direction) {
+      const nextPageNum = page + direction;
+      if (nextPageNum >= 0 && nextPageNum < pages.length) {
+        page = nextPageNum;
+        updateContent(direction); // Panggil updateContent dengan animasi
       }
     }
 
-    function prevPage() {
-      if (page > 0) {
-        page--;
-        updateContent();
-      }
-    }
+    // Ganti panggilan fungsi di tombol
+    // Perubahan di HTML: onclick="prevPage()" menjadi onclick="handleNavigation(-1)"
+    // Perubahan di HTML: onclick="nextPage()" menjadi onclick="handleNavigation(1)"
 
     function openPopup() {
       popup.style.display = "flex";
@@ -296,6 +332,7 @@
       backgroundMusic.play().catch(error => {
         console.log("Autoplay of music was prevented by the browser:", error);
       });
+      updateContent(); // Panggil updateContent saat DOMContentLoaded untuk halaman awal
     });
 
     document.body.addEventListener('click', () => {
@@ -306,7 +343,8 @@
       }
     }, { once: true });
 
-    updateContent();
+    // Panggil updateContent() sekali saat pertama kali halaman dimuat untuk menampilkan konten awal
+    // Tidak perlu lagi memanggil updateContent() di luar listener DOMContentLoaded, karena sudah ada di dalamnya.
   </script>
 </body>
 </html>
