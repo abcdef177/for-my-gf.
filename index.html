@@ -123,8 +123,9 @@
       to { opacity: 1; transform: scale(1); }
     }
     .deep {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
+      /* Perubahan di sini: Menggunakan font Poppins */
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.05rem; /* Ukuran disesuaikan sedikit agar tetap proporsional */
       font-style: normal;
       background: #fff6fa;
       padding: 25px;
@@ -212,6 +213,7 @@
   </div>
 
   <audio id="backgroundMusic" src="sempurna.mp3" loop autoplay></audio>
+
   <script>
     const pageTitles = [
       "Happy Girlfriend Day 💖",
@@ -235,7 +237,7 @@
       `aku juga minta maaf atas semua kesalahanku — baik yang sengaja maupun yang ga aku sadari yaa cantik.<br><br>thanks for still choosing me, for understanding me, for being so warm and patient. you're not just my girlfriend. you're my best friend, partner, and safe place in one.<br><br><button onclick="openPopup()">Buka Surat Rahasia 💌</button>`,
       `di momen ini, aku cuma pengen kamu tau:<div class="quote">“one day, this distance will just be a story we laugh about — while holding hands in the same place.”</div>sampai hari itu datang, i’ll keep loving you from here, with all i have.`,
       `happy gf day yaa cantik.<br><br>thank you for being you — yang sabar, kuat, tulus, dan selalu ada walaupun dari jauh.<br><br>with love that’s silly, sincere, and forever yours,<br><strong>kak al 💗</strong>`,
-      `<div  class="deep">Alayya Mauliza Lutfina, selama bersamamu, aku belajar bahwa cinta itu ga harus selalu terdengar keras — kadang justru muncul di momen paling hening, di diam yang terasa penuh. Di malam-malam panjang yang cuma diisi satu pikiran: I choose you, again and again.<br><br>Every version of you — versi kamu yang lembut, yang kuat, yang capek, yang bersinar. Aku tetap milih kamu, setiap kali.<br><br>There’s something timeless about us. Rasanya kita bukan sekadar singgah di hidup masing-masing, tapi memang ditulis bareng dalam cerita panjang — terselip di tiap bab, tetap di pinggir-pinggirnya.<br><br>Di dunia yang serba cepat dan serba berubah ini, you’ve become my constant. Dan buat aku, cinta memang seharusnya begitu — tenang, tapi tak berbatas.</div><div class="signature">for Alayya, from kak al 🌷</div>`,
+      `<div class="deep">Alayya Mauliza Lutfina, selama bersamamu, aku belajar bahwa cinta itu ga harus selalu terdengar keras — kadang justru muncul di momen paling hening, di diam yang terasa penuh. Di malam-malam panjang yang cuma diisi satu pikiran: I choose you, again and again.<br><br>Every version of you — versi kamu yang lembut, yang kuat, yang capek, yang bersinar. Aku tetap milih kamu, setiap kali.<br><br>There’s something timeless about us. Rasanya kita bukan sekadar singgah di hidup masing-masing, tapi memang ditulis bareng dalam cerita panjang — terselip di tiap bab, tetap di pinggir-pinggirnya.<br><br>Di dunia yang serba cepat dan serba berubah ini, you’ve become my constant. Dan buat aku, cinta memang seharusnya begitu — tenang, tapi tak berbatas.</div><div class="signature">for Alayya, from kak al 🌷</div>`,
       `<div class="closing-page">
           For all the smiles you bring, the calm you give, and the future we're building,
           <div class="love-you">I simply adore you.</div>
@@ -255,7 +257,7 @@
     const subheadEl = document.getElementById("subheadText");
     const mainTitleEl = document.getElementById("mainTitle");
     const secretLetterContentEl = document.getElementById("secretLetterContent");
-    const backgroundMusic = document.getElementById('backgroundMusic'); // Ambil elemen audio
+    const backgroundMusic = document.getElementById('backgroundMusic');
 
     function updateContent() {
       contentEl.innerHTML = pages[page];
@@ -290,26 +292,19 @@
       popup.style.display = "none";
     }
 
-    // Ini adalah bagian JavaScript untuk mencoba memutar lagu secara otomatis
     document.addEventListener('DOMContentLoaded', () => {
       backgroundMusic.play().catch(error => {
-        // Ini akan berjalan jika browser memblokir autoplay
         console.log("Autoplay of music was prevented by the browser:", error);
-        // Kamu bisa menambahkan pesan ke pengguna di sini,
-        // misalnya, "Musik tidak dapat diputar otomatis. Klik di mana saja untuk memulai."
       });
     });
 
-    // Event listener untuk memulai musik saat ada interaksi pengguna
-    // Ini adalah fallback terbaik jika autoplay diblokir
     document.body.addEventListener('click', () => {
-      // Hanya coba putar jika musik belum berjalan
       if (backgroundMusic.paused) {
         backgroundMusic.play().catch(error => {
           console.log("Music play after click was also prevented:", error);
         });
       }
-    }, { once: true }); // { once: true } artinya listener ini hanya akan aktif sekali
+    }, { once: true });
 
     updateContent();
   </script>
